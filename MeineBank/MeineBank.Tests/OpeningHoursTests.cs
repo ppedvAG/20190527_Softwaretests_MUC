@@ -1,5 +1,6 @@
 ﻿using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pose;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -68,6 +69,22 @@ namespace MeineBank.Tests
             }
 
             // Ab hier ist wieder alles normal 
+        }
+
+        [TestMethod]
+        public void OpeningHours_IsNowOpen_Pose()
+        {
+            Shim dateShim = Shim.Replace(() => DateTime.Now).With(() => new DateTime(1856,3,13));
+
+            DateTime richtigesDatum = DateTime.Now; // Default-Value
+            DateTime falschesDatum = default;
+            PoseContext.Isolate(() =>
+            {
+                falschesDatum = DateTime.Now;
+                // Hier drinnen bitte kein Assert machen (=> lustige Fehler von VS)
+            }, dateShim);
+
+            Assert.AreEqual(new DateTime(1856, 3, 13), falschesDatum);
         }
     }
 }
