@@ -64,5 +64,11 @@ namespace MeineBank
             else
                 return false; // Alle Tage die nicht im Dict sind (z.B. Sonntag), sind zu !
         }
+
+        public bool IsNowOpen()
+        {
+            return IsOpen(DateTime.Now); // Abhängigkeit im .NET Framework
+        }
+
     }
 }

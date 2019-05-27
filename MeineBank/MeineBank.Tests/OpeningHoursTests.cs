@@ -40,5 +40,15 @@ namespace MeineBank.Tests
 
             Assert.AreEqual(result, oh.IsOpen(dt));
         }
+
+        [TestMethod]
+        public void OpeningHours_IsNowOpen()
+        {
+            var oh = new OpeningHours();
+
+            var result = oh.IsNowOpen(); // Test funktioniert nur zwischen 10:30 und 19:00 :(
+
+            Assert.IsTrue(result); // es ist offen
+        }
     }
 }
