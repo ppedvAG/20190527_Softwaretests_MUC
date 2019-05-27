@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Taschenrechner
 {
-    public class Class1
+    public class Calculator
     {
+        public int Sum(int a, int b)
+        {
+            return a + b;
+        }
     }
 }
