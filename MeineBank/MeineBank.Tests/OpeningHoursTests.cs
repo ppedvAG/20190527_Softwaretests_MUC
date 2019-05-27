@@ -1,6 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,14 +43,31 @@ namespace MeineBank.Tests
             Assert.AreEqual(result, oh.IsOpen(dt));
         }
 
+        // FakesFramework: .NET 4.7.* macht öfters probleme => 4.6.* verwenden !
         [TestMethod]
         public void OpeningHours_IsNowOpen()
         {
-            var oh = new OpeningHours();
+            // var oh = new OpeningHours();
+            // var result = oh.IsNowOpen(); // Test funktioniert nur zwischen 10:30 und 19:00 :(
+            // Assert.IsTrue(result); // es ist offen
 
-            var result = oh.IsNowOpen(); // Test funktioniert nur zwischen 10:30 und 19:00 :(
+            using (ShimsContext.Create()) // Nur innerhalb des using-Blocks sind meine Fakes gültig
+            {
+                // Nach dieser Zeile Code wird DateTime.Now immer den 1.1.2019 um 20:00 zurückliefern
+                System.Fakes.ShimDateTime.NowGet = () => new DateTime(2019, 1, 1, 20, 00, 00);
 
-            Assert.IsTrue(result); // es ist offen
+                // Andere abhängigkeiten:
+                System.IO.Fakes.ShimFile.ExistsString = filename => true; // File.Exists(..) liefert immer True
+
+                Assert.IsTrue(File.Exists("7:\\kjads%%&(%&.IGASD%QQQQ@@q³³³"));
+
+                var oh = new OpeningHours();
+                var result = oh.IsNowOpen();
+
+                Assert.IsFalse(result); // Dienstag um 20:00 muss zu sein !!!
+            }
+
+            // Ab hier ist wieder alles normal 
         }
     }
 }
