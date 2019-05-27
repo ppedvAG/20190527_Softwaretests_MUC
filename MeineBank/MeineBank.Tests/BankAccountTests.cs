@@ -70,7 +70,7 @@ namespace MeineBank.Tests
         {
             var ba = new BankAccount(20m);
 
-            Assert.ThrowsException<ArgumentException>(() => ba.Withdraw(5m));
+            Assert.ThrowsException<ArgumentException>(() => ba.Withdraw(-5m));
         }
 
         [TestMethod]

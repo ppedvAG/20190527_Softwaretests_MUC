@@ -8,27 +8,30 @@ namespace MeineBank
 {
     public class BankAccount
     {
-        private decimal v;
-
         public BankAccount()
         {
         }
 
-        public BankAccount(decimal v)
+        public BankAccount(decimal Balance)
         {
-            this.v = v;
+            this.Balance = Balance;
         }
 
-        public decimal Balance { get; set; }
+        public decimal Balance { get; private set; }
 
-        public void Deposit(decimal v)
+        public void Deposit(decimal value)
         {
-            throw new NotImplementedException();
+            if (value < 0)
+                throw new ArgumentException();
+
+            Balance += value;
         }
 
-        public void Withdraw(decimal v)
+        public void Withdraw(decimal value)
         {
-            throw new NotImplementedException();
+            if (value < 0 || value > Balance)
+                throw new ArgumentException();
+            Balance -= value;
         }
     }
 }
