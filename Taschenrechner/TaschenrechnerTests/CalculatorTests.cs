@@ -7,12 +7,13 @@ namespace Taschenrechner.Tests
     public class CalculatorTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void Sum_3_and_5_returns_8()
         {
+            // Arrange
             var calc = new Calculator();
-
+            // Act
             var erg = calc.Sum(3, 5);
-
+            // Assert
             Assert.AreEqual(8, erg);
         }
     }
