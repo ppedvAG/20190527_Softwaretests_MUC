@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace MeineBank
 {
+    public enum Wealth { Zero,Poor,Ok,Rich};
+
     public class BankAccount
     {
         public BankAccount()
@@ -18,6 +20,20 @@ namespace MeineBank
         }
 
         public decimal Balance { get; private set; }
+        public Wealth Wealth
+        {
+            get
+            {
+                if (Balance == 0)
+                    return Wealth.Zero;
+                else if (Balance < 100)
+                    return Wealth.Poor;
+                else if (Balance < 10000)
+                    return Wealth.Ok; 
+                else // alles drüber
+                    return Wealth.Rich;
+            }
+        }
 
         public void Deposit(decimal value)
         {

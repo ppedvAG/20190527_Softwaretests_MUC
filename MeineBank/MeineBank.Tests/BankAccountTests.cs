@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MeineBank.Tests
@@ -83,5 +84,25 @@ namespace MeineBank.Tests
 
         // Zustand, den man einchecken kann
 
+
+        [TestMethod]
+        public void BankAccount_Check_Wealth()
+        {
+            var ba = new BankAccount(20000);
+            using (ShimsContext.Create())
+            {
+                Fakes.ShimBankAccount.AllInstances.BalanceGet = x => 0; // Jedes Bankkonto gibt 0 beim Kontostand aus
+                Assert.AreEqual(Wealth.Zero, ba.Wealth);
+
+                Fakes.ShimBankAccount.AllInstances.BalanceGet = x => 50; 
+                Assert.AreEqual(Wealth.Poor, ba.Wealth);
+
+                Fakes.ShimBankAccount.AllInstances.BalanceGet = x => 5000;
+                Assert.AreEqual(Wealth.Ok, ba.Wealth);
+
+                Fakes.ShimBankAccount.AllInstances.BalanceGet = x => 200000; 
+                Assert.AreEqual(Wealth.Rich, ba.Wealth);
+            }
+        }
     }
 }
