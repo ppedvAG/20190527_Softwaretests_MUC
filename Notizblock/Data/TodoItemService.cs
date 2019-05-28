@@ -23,5 +23,11 @@ namespace Data
                 return JsonConvert.DeserializeObject<List<TodoItem>>(json);
             }
         }
+
+        public List<TodoItem> GetAllCompletedTodoItems()
+        {
+            var allItems = GetAllTodoItems();
+            return allItems.Where(x => x.Completed == true).ToList();
+        }
     }
 }
