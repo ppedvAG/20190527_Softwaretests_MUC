@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Hardware
 {
-    public class TodoItemGenerator3000
+    public class TodoItemGenerator3000 : IDevice
     {
         public TodoItem GenerateSomeWork()
         {
