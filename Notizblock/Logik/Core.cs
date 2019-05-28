@@ -39,6 +39,23 @@ namespace Logik
             return finishedItems;
         }
 
+        public long GetUserWithMostTodoItems()
+        {
+            Dictionary<long, int> dict = new Dictionary<long, int>();
+            foreach (var item in service.GetAllTodoItems())
+            {
+                if (!dict.ContainsKey(item.UserId))
+                    dict.Add(item.UserId, 0);
+
+                dict[item.UserId] += 1;
+            }
+
+            return dict.OrderByDescending(x => x.Value)
+                       .First().Key;
+        }
+
+
+
         public List<TodoItem> Generate10TodoItems()
         {
             List<TodoItem> result = new List<TodoItem>();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
 using Domain;
@@ -93,6 +94,29 @@ namespace Logik.Tests
 
             mock.Verify(x => x.GenerateSomeWork(), Times.Never());
             // Nachkontrollieren, ob INTERN in meinem Core die methode "GenerateSomeWork" irgendwo aufgerufen wurde
+        }
+
+        [TestMethod]
+        public void GetUserWithMostTodoItems_returns_correct_user()
+        {
+            var mock = new Mock<ITodoItemService>();
+            mock.Setup(x => x.GetAllTodoItems())
+                .Returns(() => new List<TodoItem>
+                    {
+                        new TodoItem{Id=1,Title="Eins",UserId=1,Completed=false},
+                        new TodoItem{Id=2,Title="Zwei",UserId=1,Completed=true},
+                        new TodoItem{Id=2,Title="Drei",UserId=2,Completed=false},
+                        new TodoItem{Id=2,Title="Vier",UserId=2,Completed=true},
+                        new TodoItem{Id=5,Title="Fünf",UserId=2,Completed=false},
+                    });
+
+            var core = new Core(mock.Object);
+
+
+            var result = core.GetUserWithMostTodoItems();
+
+            result.Should().Be(2);
+            mock.Verify(x => x.GetAllTodoItems(), Times.Once); // Verifiziere dass die Daten frisch aus der DB kommen !!!
         }
     }
 }
