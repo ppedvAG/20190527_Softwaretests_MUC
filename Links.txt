@@ -1,0 +1,11 @@
+Links:
+https://github.com/ppedvAG/20190527_Softwaretests_MUC
+https://github.com/tonerdo/pose   (Kostenfreie Variante von Fakes)
+https://www.jetbrains.com/dotcover/ 
+http://json2csharp.com/
+https://app.quicktype.io
+https://jsonplaceholder.typicode.com/todos
+https://github.com/AutoFixture/AutoFixture/wiki/Cheat-Sheet (automatisches generieren von Testdaten)
+https://specflow.org/
+https://fluentassertions.com/documentation/
+https://github.com/Moq/moq4/wiki/Quickstart
