@@ -7,8 +7,13 @@ namespace Data.Tests
     public class TodoItemServiceTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void GetAllTodoItems_returns_5_TodoItems()
         {
+            var service = new TodoItemService();
+
+            var result = service.GetAllTodoItems();
+
+            Assert.AreEqual(5, result.Count);
         }
     }
 }
