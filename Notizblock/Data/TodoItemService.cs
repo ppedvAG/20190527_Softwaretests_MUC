@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace Data
 {
     // Liefert Daten 
-    public class TodoItemService
+    public class TodoItemService : ITodoItemService
     {
         public List<TodoItem> GetAllTodoItems()
         {
             // 1) Daten herunterladen
             // 2) JSON-String deserialisieren
 
-            using(HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient())
             {
                 string json = client.GetStringAsync("https://jsonplaceholder.typicode.com/todos").Result; // Ruft eine asynchrone Methode synchron auf
                 return JsonConvert.DeserializeObject<List<TodoItem>>(json);
