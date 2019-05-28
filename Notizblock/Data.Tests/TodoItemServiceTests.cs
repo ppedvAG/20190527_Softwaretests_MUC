@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using AutoFixture;
 using Domain;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -55,6 +57,41 @@ namespace Data.Tests
 
                 Assert.AreEqual(2, result.Count);
             }
+        }
+
+        [TestMethod]
+        public void GetAllCompletedTodoItems_returns_500()
+        {
+            // Autofixture -> Generieren von Testdaten
+            var fixture = new Fixture();
+
+            //var item = fixture.Create<TodoItem>(); // ein einzelnes TodoItem erstellen
+            //var vieleItems = fixture.CreateMany<TodoItem>(500).ToList(); // mehrere Items erstellen
+            //var fertigesItem = fixture.Build<TodoItem>()
+            //                          .With(x => x.Completed, true)
+            //                          .Create();
+
+            List<TodoItem> testdata = new List<TodoItem>();
+            var completedItems = fixture.Build<TodoItem>()
+                                        .With(x => x.Completed, true)
+                                        .CreateMany(500);
+            var uncompletedItems = fixture.Build<TodoItem>()
+                                          .With(x => x.Completed, false)
+                                          .CreateMany(1500);
+
+            testdata.AddRange(completedItems);
+            testdata.AddRange(uncompletedItems);
+
+
+            var service = new TodoItemService();
+
+            using (ShimsContext.Create())
+            {
+                Data.Fakes.ShimTodoItemService.AllInstances.GetAllTodoItems = x => testdata;
+                var result = service.GetAllCompletedTodoItems();
+                Assert.AreEqual(500, result.Count);
+            }
+
         }
     }
 }
