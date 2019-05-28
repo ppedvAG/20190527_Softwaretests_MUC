@@ -4,6 +4,7 @@ using AutoFixture;
 using Domain;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Logik.Tests
 {
@@ -45,6 +46,53 @@ namespace Logik.Tests
                            .And.OnlyContain(items => items.Completed);
 
             workload.Should().OnlyContain(item => item.Completed);
+        }
+
+        [TestMethod]
+        public void Generate10TodoItems_returns_10_items()
+        {
+            var mock = new Mock<IDevice>();
+            mock.Setup(x => x.GenerateSomeWork())
+                .Returns(new TodoItem());
+
+            var core = new Core(null, mock.Object);
+
+            var result = core.Generate10TodoItems();
+
+            result.Should().HaveCount(10);
+            mock.Verify(x => x.GenerateSomeWork(), Times.Exactly(10));
+            // Nachkontrollieren, ob INTERN in meinem Core die methode "GenerateSomeWork" irgendwo aufgerufen wurde
+        }
+
+        [TestMethod]
+        public void Generate100TodoItems_returns_100_items()
+        {
+            var mock = new Mock<IDevice>();
+            mock.Setup(x => x.GenerateSomeWork())
+                .Returns(new TodoItem());
+
+            var core = new Core(null, mock.Object);
+
+            var result = core.GenerateTodoItems(100);
+
+            result.Should().HaveCount(100);
+            mock.Verify(x => x.GenerateSomeWork(), Times.Exactly(100));
+            // Nachkontrollieren, ob INTERN in meinem Core die methode "GenerateSomeWork" irgendwo aufgerufen wurde
+        }
+
+        [TestMethod]
+        public void GenerateTodoItems_with_negative_amount_throws_ArgumentException()
+        {
+            var mock = new Mock<IDevice>();
+            mock.Setup(x => x.GenerateSomeWork())
+                .Returns(new TodoItem());
+
+            var core = new Core(null, mock.Object);
+
+            Assert.ThrowsException<ArgumentException>(() => core.GenerateTodoItems(-100));
+
+            mock.Verify(x => x.GenerateSomeWork(), Times.Never());
+            // Nachkontrollieren, ob INTERN in meinem Core die methode "GenerateSomeWork" irgendwo aufgerufen wurde
         }
     }
 }

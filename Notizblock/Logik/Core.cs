@@ -14,7 +14,13 @@ namespace Logik
         {
             this.service = service;
         }
+        public Core(ITodoItemService service, IDevice device) // Dependency-Injection
+        {
+            this.service = service;
+            this.device = device;
+        }
 
+        private readonly IDevice device;
         private readonly ITodoItemService service;
 
         // Wir bekommen Items rein und arbeiten alle Items, die nicht "completed" sind ab
@@ -33,6 +39,30 @@ namespace Logik
             return finishedItems;
         }
 
+        public List<TodoItem> Generate10TodoItems()
+        {
+            List<TodoItem> result = new List<TodoItem>();
+            for (int i = 0; i < 10; i++)
+            {
+                result.Add(device.GenerateSomeWork());
+            }
+            return result;
+        }
 
+        public List<TodoItem> GenerateTodoItems(int amount)
+        {
+            if (amount < 0)
+                throw new ArgumentException();
+
+            List<TodoItem> result = new List<TodoItem>();
+            // device.GenerateSomeWork(); // bug, ich steuer es an aber es pasiert nix
+
+            for (int i = 0; i < amount; i++)
+            {
+                result.Add(device.GenerateSomeWork());
+            }
+
+            return result;
+        }
     }
 }
